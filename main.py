@@ -1094,11 +1094,23 @@ class ContrasenaOlvidada(Screen):
             print(usuarios)
             db.commit()
             db.close()
-        else:
-            dat = Noemail()
-            dat.open()
-            self.ids["email"].text=""
-            self.ids["contrasenaperdida"].text=""
+        elif usuarios is None:
+            c.execute('select * from particular where email="{}"'.format(email1))
+            usuariosp = c.fetchone()
+            print(usuarios)
+            if usuariosp is not None:
+                contrasena = usuariosp[4]
+                print (contrasena)
+                self.ids["contrasenaperdida"].text=contrasena
+                print(usuariosp)
+                db.commit()
+                db.close()
+            
+            else:
+                dat = Noemail()
+                dat.open()
+                self.ids["email"].text=""
+                self.ids["contrasenaperdida"].text=""
 
 #*********************El primer parametro pasado hace referencia a la clase mas arriba creada***********************************
 #*********************el parametro name="       " hace referencia a la palabra demtro del builder*******************************
