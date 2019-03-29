@@ -1,3 +1,5 @@
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++Importacion de paquetes*+++++++++++++++++++++++++++++++++++++++++++++++
+
 import kivy
 kivy.require('1.9.0')
 import re
@@ -22,7 +24,7 @@ from kivy.uix.recycleview.layout import LayoutSelectionBehavior
 
 
 Builder.load_string("""
-#*********************************************** COMIENZO DE PANTALLA INICIO*******************************************************
+#*********************************************** COMIENZO DE PANTALLA INICIO KV*******************************************************
 
 <Inicio>:
     name:"Inicio"
@@ -51,6 +53,7 @@ Builder.load_string("""
             text:"ENTRAR"
             pos_hint:{'center_x':.5,'y':.13}
             size_hint:.4,.05
+
             background_normal: '' 
             background_color: 1, .3, .4, 1  
             on_press:
@@ -140,7 +143,6 @@ Builder.load_string("""
             pos_hint:{'center_x':.5,'y':.65}
             size_hint:.5,.06
             multiline:False
-#**********************************************write_tab false permite tabular de un input a otro***************************************
             write_tab:False
             password:True
 
@@ -162,7 +164,7 @@ Builder.load_string("""
                 root.manager.transition.direction = "left"
                 root.manager.transition.duration = .3
 
-#******************************************FIN DE INICIO DE SESION INICIO DE REGISTRO******************************
+#******************************************FIN DE INICIO DE SESION INICIO DE CONTRASEÑA OLVIDADA******************************
 <ContrasenaOlvidada>:
     name:"ContrasenaOlvidada"
     FloatLayout:
@@ -207,7 +209,7 @@ Builder.load_string("""
                # root.current.manager("IniciarSesion")
 
         
-
+#*******************************************************************FIN CONTRASEÑA OLVIDADA COMIENZO DE REGISTRO******************************************************************
         
 
 <Registro>:
@@ -354,7 +356,8 @@ Builder.load_string("""
                 root.guardar_nombre(nombre_organizacion.text,usuario_organizacion.text,email_organizacion.text,telefono_organizacion.text,contrasena_organizacion.text)
                 root.manager.transition.direction = "left"
                 root.manager.transition.duration = .3
-        
+#*******************************************************************FIN ORGANIZACIONES COMIENZO DE PERSONAL******************************************************************
+
 <Personal>:
     name:"Personal"
     FloatLayout:
@@ -437,6 +440,7 @@ Builder.load_string("""
                 root.manager.transition.direction = "right"
                 root.manager.transition.duration = .3
 
+#*******************************************************************FIN PERSONAL COMIENZO DE REGISTRO EXITOSO******************************************************************
 
 <RegistroExitoso>:
     name:"RegistroExitoso"
@@ -472,6 +476,7 @@ Builder.load_string("""
                 root.manager.transition.duration = .3
                 root.manager.current = "IniciarSesion"
 
+#*******************************************************************FIN REGISTRO EXITOSO COMIENZO DE DONATORIO DONADOR******************************************************************
 
 <DonatarioDonador>:
     name:"DonatarioDonador"
@@ -508,6 +513,7 @@ Builder.load_string("""
                 root.manager.transition.direction = "left"
                 root.manager.transition.duration = .3
                 root.manager.current = "Donador"
+#*******************************************************************FIN DONATORIODONADOR COMIENZO DE DONATORIO******************************************************************
 
 <Donatario>:
     orientation:"vertical"
@@ -532,6 +538,7 @@ Builder.load_string("""
                     background_normal: '' 
                     background_color: 1, .3, .4, 1 
 
+#*******************************************************************FIN DONATORIO COMIENZO DE SELECTABLELABEL PARA RECYCLEVIEW******************************************************************
 
 
 <SelectableLabel>:
@@ -542,7 +549,8 @@ Builder.load_string("""
         Rectangle:
             pos: self.pos
             size: self.size
-        
+#*******************************************************************FIN SELECTABLELABEL COMIENZO DE EXAMPLERV(RECYCLEVIEW)******************************************************************
+
                 
 <ExampleRV>:
     
@@ -555,7 +563,8 @@ Builder.load_string("""
         orientation: 'vertical'
         multiselect: True
         touch_multiselect: True
-        
+#*******************************************************************FIN EXAMPLERV COMIENZO DE DONADOR******************************************************************
+
 
 <Donador>:
     name:"Donador"       
@@ -655,6 +664,9 @@ Builder.load_string("""
                 root.manager.transition.direction = "left"
                 root.manager.transition.duration = .3
 
+
+#*******************************************************************FIN DONADOR COMIENZO DE DONACIONEXITOSA******************************************************************
+
 <DonacionExitosa>:
     name:"DonacionExitosa"
     FloatLayout:
@@ -690,6 +702,7 @@ Builder.load_string("""
                 root.manager.transition.duration = .3
                 root.manager.current = "Donador"
 
+#*******************************************************************COMIENZO DE POPUPS******************************************************************
 
 
 <SimplePopup>:
@@ -702,6 +715,8 @@ Builder.load_string("""
         background_color: 1, .3, .4, 1 
         text: 'TOQUE AQUI PARA VOLVER'
         on_press: pop.dismiss()
+
+
 <AceptarDonacion>:
     id:aceptar
     size_hint: .4, .4
@@ -769,11 +784,16 @@ Builder.load_string("""
         text: 'VOLVER'
         on_press: Noemail.dismiss()  
 
-#*******************************************FIN DE ESTRUCTURA DE PROGRAMA****************************************************
+#*******************************************************************FIN POPUPS******************************************************************
+
+#*******************************************FIN DE VISTA DE PROGRAMA****************************************************
 
 
 
 """)
+
+
+
 #*********************************************************Variables de organizaciones******************************
 organizaciones= []
 def agregarabaseorganizaciones():
@@ -784,6 +804,9 @@ def agregarabaseorganizaciones():
     cur.fetchall()
     con.commit()
     con.close()
+
+
+
 #************************************base personal y datos personal******************************************
 personal = []
 def agregarabasepersonal():
@@ -797,12 +820,9 @@ def agregarabasepersonal():
     con.close()
     personal=[]
 
-
-
-
+#************************************base PRODUCTOS y llamada de productos******************************************
 
 productos=[]
-cantidad=[]
 def agregarbaseproductos():
     global productos
     con = sqlite3.connect("base.db")
@@ -831,6 +851,11 @@ def cargarproductosbase():
     print ("cargue estos datos")
     print (producto)
 
+
+#************************************fin base productos******************************************
+
+
+#************************************COMIENZO DE RECYCLEVIEW******************************************
 
 class SelectableRecycleBoxLayout(FocusBehavior, LayoutSelectionBehavior,
                                  RecycleBoxLayout):
@@ -877,6 +902,11 @@ class ExampleRV(RecycleView):
         cargarproductosbase()
         self.data = [{'text': str(x)} for x in producto]
         print(producto)
+#************************************FIN RECYCLEVIEW******************************************
+
+
+#************************************COMIENZO PANTALLAS Y SUS FUNCIONES******************************************
+
         
 class Inicio(Screen):
 #******************************************funcion para tomar datos de un textinput*****************************
@@ -907,8 +937,10 @@ class FaltanDatos(Popup):
 class ContrasenaInvalida(Popup):
     pass
     
+
 class IniciarSesion(Screen):
 
+#************************************ FUNCION PARA VALIDAR CONTRA LA BASE EL USUARIO Y LA CONTRASEÑA ******************************************
     
     def validacionregistro(self):
         usuario= self.ids["usuario_login"].text
@@ -929,12 +961,18 @@ class IniciarSesion(Screen):
             self.ids["usuario_login"].text = ""
             self.ids["contrasena_login"].text=""
 
+#************************************FIN FUNCION PARA VALIDAR CONTRA LA BASE EL USUARIO Y LA CONTRASEÑA ******************************************
+
+
 class EmailInvalido(Popup):
     pass
 class Registro(Screen):
     pass
 class NoProductos(Popup):
     pass
+
+
+#************************************FUNCION PARA AGREGAR DATOS DE PERSONAL A LA VARIABLE GLOBAL Y BASE ******************************************
 
 class Personal(Screen):
     global personal
@@ -979,8 +1017,10 @@ class Personal(Screen):
             dat = FaltanDatos()
             dat.open()
             screen_manager.current="Personal"
-        
-                        
+#************************************FIN PARA AGREGAR DATOS DE PERSONAL A LA VARIABLE GLOBAL Y BASE ******************************************
+
+#************************************FUNCION PARA AGREGAR DATOS DE ORGANIZACIONES A LA VARIABLE GLOBAL Y BASE ******************************************
+
 class Organizaciones(Screen):
     global organizaciones
 
@@ -1027,6 +1067,7 @@ class Organizaciones(Screen):
             dat.open()
             screen_manager.current="Organizaciones"        
 
+#************************************FIN FUNCION PARA AGREGAR DATOS DE PERSONAL A LA VARIABLE GLOBAL Y BASE ******************************************
 
 class RegistroExitoso(Screen):
     pass
@@ -1036,6 +1077,7 @@ class InicioPerfil(Screen):
     
 class DonatarioDonador(Screen):
     pass
+#************************************FUNCION PARA AGREGAR DATOS DE PRODUCTOS A LA VARIABLE GLOBAL Y BASE ******************************************
 
 class Donador(Screen):
     def guardar_producto(self, producto_productos,cantidad_productos,ciudad_productos,barrio_productos,destino_productos):
@@ -1075,7 +1117,10 @@ class DonacionExitosa(Screen):
         global productos
         productos=[]
         return productos
-screen_manager = ScreenManager()
+
+#************************************FIN FUNCION PARA AGREGAR DATOS DE PERSONAL A LA VARIABLE GLOBAL Y BASE ******************************************
+
+#************************************ FUNCION PARA RECIBIR DATOS DE BASE EMAIL Y MOSTRAR DATOS DE CONTRASEÑA OLVIDADA ******************************************
 
 
 class ContrasenaOlvidada(Screen):
@@ -1112,9 +1157,16 @@ class ContrasenaOlvidada(Screen):
                 self.ids["email"].text=""
                 self.ids["contrasenaperdida"].text=""
 
+#************************************FIN FUNCION PARA RECIBIR DATOS DE BASE EMAIL Y MOSTRAR DATOS DE CONTRASEÑA OLVIDADA ******************************************
+
+#****************************************************************************************FIN PANTALLAS Y FUNCIONES***********************************************************************************************
+
+#************************************FUNCION PARA MOSTRAR EN PANTALLA LOS WIDGETS DE CADA SCREEN ******************************************
+
 #*********************El primer parametro pasado hace referencia a la clase mas arriba creada***********************************
 #*********************el parametro name="       " hace referencia a la palabra demtro del builder*******************************
 
+screen_manager = ScreenManager()
 screen_manager.add_widget(Inicio(name="Inicio"))
 screen_manager.add_widget(ior(name="ior"))
 screen_manager.add_widget(IniciarSesion(name="IniciarSesion"))
@@ -1128,7 +1180,9 @@ screen_manager.add_widget(DonatarioDonador(name="DonatarioDonador"))
 screen_manager.add_widget(DonacionExitosa(name="DonacionExitosa"))
 screen_manager.add_widget(ContrasenaOlvidada(name="ContrasenaOlvidada"))
 
+#************************************FIN FUNCION PARA MOSTRAR EN PANTALLA LOS WIDGETS DE CADA SCREEN ******************************************
 
+#************************************CLASE QUE COMIENZA LA APLICACION  Y MAPEO DE BOTON ESCAPE O POR CONSIGUIENTE EN ANDROID ATRAS  ******************************************
 
 
 class MainApp(App):
